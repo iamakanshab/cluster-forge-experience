@@ -1,0 +1,43 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: clusterforge
+  region: us-west-2  # Same region as your existing cluster for better connectivity
+  version: "1.27"    # Recent stable version
+
+# Networking
+vpc:
+  cidr: "192.168.0.0/16"
+  nat:
+    gateway: Single
+
+# Node Groups
+managedNodeGroups:
+  - name: ng-1
+    instanceType: t3.large    # 2 vCPU, 8 GiB Memory
+    minSize: 2
+    maxSize: 4
+    desiredCapacity: 2
+    volumeSize: 50
+    privateNetworking: true
+    labels:
+      role: worker
+    tags:
+      k8s.io/cluster-autoscaler/enabled: "true"
+      k8s.io/cluster-autoscaler/clusterforge: "owned"
+
+# Enable IAM OIDC provider
+iam:
+  withOIDC: true
+
+# Add-ons
+addons:
+  - name: aws-ebs-csi-driver
+    version: latest
+  - name: vpc-cni
+    version: latest
+  - name: coredns
+    version: latest
+  - name: kube-proxy
+    version: latest
