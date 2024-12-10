@@ -108,7 +108,7 @@ spec:
 
 ### Basic Grafana Dashboard
 1. Login to Grafana
-2. Import dashboard 12345 for basic Kubernetes metrics
+2. Import dashboard <-----link-\---> for basic Kubernetes metrics
 3. Add your app's metrics using PromQL:
 ```promql
 rate(http_requests_total{app="your-app"}[5m])
